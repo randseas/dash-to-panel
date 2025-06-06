@@ -1,0 +1,10 @@
+{
+  "extension-id": "dash-to-panel",
+  "uuid": "dash-to-panel@randseas.github.com",
+  "name": "Dash to Panel",
+  "description": "Edited by randseas",
+  "shell-version": [ "46", "47", "48" ],
+  "url": "https://github.com/randseas/dash-to-panel",
+  "gettext-domain": "dash-to-panel",
+  "version": 4.2
+}

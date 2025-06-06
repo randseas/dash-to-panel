@@ -1,0 +1,142 @@
+#dashtopanelTaskbar .dash-item-container > StWidget,
+.dashtopanelMainPanel .dash-item-container .show-apps {
+  margin: 0;
+  padding: 0;
+}
+
+#dashtopanelScrollview .overview-tile,
+.dashtopanelMainPanel .overview-tile {
+  background: none;
+}
+
+#dashtopanelScrollview .overview-tile .overview-label {
+  /* must match TITLE_RIGHT_PADDING in apppicons.js */
+  padding-right: 8px;
+  text-align: left;
+}
+
+#dashtopanelScrollview .overview-tile:hover .dtp-container,
+#dashtopanelScrollview .overview-tile:focus .dtp-container {
+  background-color: rgba(238, 238, 236, 0.1);
+  border-radius: 0px;
+}
+
+#dashtopanelScrollview
+  .overview-tile:hover
+  .dtp-container
+  > .dtp-dots-container,
+#dashtopanelScrollview
+  .overview-tile:focus
+  .dtp-container
+  > .dtp-dots-container {
+  border-radius: 0px;
+  background-color: #ffffff00 !important;
+}
+
+.dashtopanelMainPanel .dash-item-container .show-apps:hover {
+  background-color: rgba(238, 238, 238, 0.1);
+}
+.dashtopanelMainPanel .dash-item-container .show-apps .overview-icon {
+  color: #fff;
+}
+.dashtopanelMainPanel .dash-item-container .show-apps:hover .overview-icon {
+  background: none;
+}
+
+#dashtopanelTaskbar .dash-item-container .overview-tile:hover,
+#dashtopanelTaskbar
+  .dash-item-container
+  .overview-tile
+  .dtp-container
+  .overview-icon,
+#dashtopanelScrollview .overview-tile:hover .dtp-container.no-highlight,
+#dashtopanelScrollview .overview-tile:focus .dtp-container.no-highlight {
+  background: none;
+}
+
+#dashtopanelScrollview .overview-tile:active .dtp-container {
+  background-color: rgba(238, 238, 236, 0.18);
+}
+
+#dashtopanelScrollview .overview-tile .favorite {
+  background-color: rgba(80, 150, 255, 0.4);
+}
+
+.dashtopanelSecondaryMenu {
+  max-width: 400px;
+}
+#dashtopanelThumbnailList {
+  spacing: 0em;
+  padding: 0 1em;
+}
+#dashtopanelThumbnailList .popup-menu-item {
+  padding: 0;
+  border-radius: 5px;
+  spacing: 0;
+}
+#dashtopanelThumbnailList .window-box {
+  padding: 0;
+  spacing: 0;
+}
+#dashtopanelThumbnailList .preview-window-title {
+  padding-top: 1em;
+}
+.popup-menu.panel-menu {
+  margin-bottom: 0;
+}
+#panel #panelLeft,
+#panel #panelCenter {
+  spacing: 0px;
+}
+.showdesktop-button-dark-hovered {
+  background-color: rgba(200, 200, 200, 0.4);
+}
+.showdesktop-button-light-hovered {
+  background-color: rgba(55, 55, 55, 0.4);
+}
+#dashtopanelScrollview .badge {
+  color: rgba(255, 255, 255, 1);
+  padding: 0.2em 0.5em;
+  border-radius: 1em;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 0 2px;
+}
+#dashtopanelScrollview .number-overlay {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+#dashtopanelScrollview .notification-badge {
+  background-color: rgba(214, 0, 0, 0.8);
+}
+
+/* Windows 11 style by randseas */
+#uiGroup .show-apps,
+#uiGroup .dtp-container,
+#uiGroup .dtp-dots-container,
+#uiGroup #preview-menu,
+#uiGroup #preview-menu .preview-header-box,
+#uiGroup #preview-menu .preview-container,
+#uiGroup #preview-menu .preview-close-btn-container {
+  border-radius: 7px !important;
+}
+
+#uiGroup .dtp-container {
+  height: 44.75px !important;
+  width: 49.25px !important;
+}
+
+.dashtopanelMainPanel .dtp-icon {
+  border-radius: 7px !important;
+}
+
+.overview-tile {
+  margin-left: 3.2px !important;
+  margin-top: 3.508px !important;
+  border-radius: 7px !important;
+}
+
+.show-apps {
+  margin-top: 3.508px !important;
+  margin-bottom: 3.508px !important;
+  width: 45px !important;
+}
