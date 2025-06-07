@@ -517,10 +517,13 @@ export const TaskbarAppIcon = GObject.registerClass(
 
       // Some trickery needed to get the effect
       const br = border_radius ? `border-radius: ${border_radius}px;` : "";
-      this._appicon_normalstyle = br;
+      const ring = "box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;";
+      const transition = "transition: all 0.25s ease-in-out;";
+
+      this._appicon_normalstyle = `${br} ${transition}`;
       this._container.set_style(this._appicon_normalstyle);
-      this._appicon_hoverstyle = `background-color: ${background_color}; ${br}`;
-      this._appicon_pressedstyle = `background-color: ${pressed_color}; ${br}`;
+      this._appicon_hoverstyle = `background-color: ${background_color}; ${br} ${ring} ${transition}`;
+      this._appicon_pressedstyle = `background-color: ${pressed_color}; ${br} ${ring} ${transition}`;
 
       if (SETTINGS.get_boolean("highlight-appicon-hover")) {
         this._container.remove_style_class_name("no-highlight");
@@ -792,6 +795,7 @@ export const TaskbarAppIcon = GObject.registerClass(
             SETTINGS.get_int("focus-highlight-opacity") * 0.01
           ) +
           ";";
+        inlineStyle += "box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08) inset;";
         inlineStyle += this._appicon_normalstyle;
       }
 
@@ -1879,20 +1883,15 @@ export class TaskbarSecondaryMenu extends AppMenu.AppMenu {
  */
 export function ItemShowLabel() {
   if (!this._labelText) return;
-
   this.label.set_text(this._labelText);
   this.label.opacity = 0;
   this.label.show();
-
   let [stageX, stageY] = this.get_transformed_position();
   let node = this.label.get_theme_node();
-
   let itemWidth = this.allocation.x2 - this.allocation.x1;
   let itemHeight = this.allocation.y2 - this.allocation.y1;
-
   let labelWidth = this.label.get_width();
   let labelHeight = this.label.get_height();
-
   let position = this._dtpPanel.geom.position;
   let labelOffset = node.get_length("-x-offset");
 
@@ -1966,6 +1965,10 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     // No action on clicked (showing of the appsview is controlled elsewhere)
     this._onClicked = () => this._removeMenuTimeout();
 
+    // constructor içinde
+    this.actor.connect("notify::hover", () => {
+      this.setShowAppsBoxShadow(this.actor.hover);
+    });
     this.actor.connect("leave-event", this._onLeaveEvent.bind(this));
     this.actor.connect("button-press-event", this._onButtonPress.bind(this));
     this.actor.connect("touch-event", this._onTouchEvent.bind(this));
@@ -2013,6 +2016,15 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     );
     this.setShowAppsPadding();
   }
+  setShowAppsBoxShadow(enable) {
+    if (enable) {
+      this.actor.set_style(
+        "box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;"
+      );
+    } else {
+      this.actor.set_style("box-shadow: none;");
+    }
+  }
   _onButtonPress(_actor, event) {
     let button = event.get_button();
     if (button == 1) {
@@ -2037,8 +2049,7 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     this.emit("menu-state-changed", false);
   }
   setShowAppsPadding() {
-    let padding = 2.5;
-    this.actor.set_style("padding:" + padding + "px " + padding + "px;");
+    this.actor.set_style(`padding: 8px 14px;`);
   }
   createMenu() {
     if (!this._menu) {
