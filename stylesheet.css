@@ -120,27 +120,26 @@
   border-radius: 7px !important;
 }
 #uiGroup .dtp-container {
-  height: 44.75px !important;
-  width: 49.25px !important;
+  height: 50px !important;
+  width: 50px !important;
 }
 .dashtopanelMainPanel .dtp-icon {
   border-radius: 7px !important;
 }
 .overview-tile {
   margin-left: 3.5px !important;
-  margin-top: 3.508px !important;
+  margin-top: 3.5px !important;
   border-radius: 7px !important;
 }
 .show-apps {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 3.508px !important;
-  margin-bottom: 3.37px !important;
-  width: 45px !important;
+  margin-top: 3.5px !important;
+  margin-bottom: 3.5px !important;
+  width: 46px !important;
   padding: 0 !important;
 }
-
 .app-well-menu-item {
   padding: 8px 12px;
   font-size: 18.2px;
@@ -148,8 +147,8 @@
 }
 
 .show-apps, .show-apps.toggle, .show-apps:focus, .show-apps:active {
-  padding-left: 2px !important;
-  padding-right: 2px !important;
+  padding-left: 3px !important;
+  padding-right: 3px !important;
   padding-top: 0px !important;
   padding-bottom: 0.45px !important;
 }

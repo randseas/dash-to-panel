@@ -106,15 +106,8 @@ function setMonitorSetting(settings, settingName, monitorIndex, value) {
   setSettingsJson(settings, settingName, currentSettings);
 }
 
-/** Returns size of panel on a specific monitor, in pixels. */
-export function getPanelSize(settings, monitorIndex) {
-  // Pull in deprecated setting if panel-sizes does not have setting for monitor.
-  return getMonitorSetting(
-    settings,
-    "panel-sizes",
-    monitorIndex,
-    settings.get_int("panel-size") || 48
-  );
+export function getPanelSize() {
+  return 58;
 }
 
 export function setPanelSize(settings, monitorIndex, value) {

@@ -725,7 +725,7 @@ export const Panel = GObject.registerClass(
     }
 
     getGeometry() {
-      let position = this.getPosition();
+      let position = St.Side.BOTTOM;
       let vertical = position == St.Side.LEFT || position == St.Side.RIGHT;
       let scaleFactor = Utils.getScaleFactor();
       let panelBoxTheme = this.panelBox.get_theme_node();
@@ -756,7 +756,7 @@ export const Panel = GObject.registerClass(
       let iconSize = 0;
       let innerSize = 0;
       let outerSize = 0;
-      let panelSize = PanelSettings.getPanelSize(SETTINGS, this.monitor.index);
+      let panelSize = PanelSettings.getPanelSize();
 
       if (vertical && panelSize - sidePadding * 2 < MIN_PANEL_SIZE)
         sidePadding = (panelSize - MIN_PANEL_SIZE) * 0.5;

@@ -141,8 +141,10 @@ export const TaskbarAppIcon = GObject.registerClass(
       this._dtpIconContainer = new St.Widget({
         style_class: "dtp-icon",
         layout_manager: new Clutter.BinLayout(),
-        style: getIconContainerStyle() + "margin-top: -2px !important;",
+        style: getIconContainerStyle(),
       });
+      this._dtpIconContainer.set_pivot_point(0.5, 0.5);
+      this._iconContainer.set_pivot_point(0.5, 0.5);
       this.remove_child(this._iconContainer);
       this.icon._iconBin.set_pivot_point(0.5, 0.5);
 
@@ -190,6 +192,29 @@ export const TaskbarAppIcon = GObject.registerClass(
       this._numberOverlay();
 
       this._signalsHandler.add(
+        [
+          this,
+          "notify::pressed",
+          () => {
+            if (this.pressed && this._dtpIconContainer) {
+              Utils.stopAnimations(this._dtpIconContainer);
+              this._dtpIconContainer.set_scale(1, 1);
+              Utils.animate(this._dtpIconContainer, {
+                scale_x: 0.9,
+                scale_y: 0.9,
+                time: 0.1,
+                transition: "easeOutQuad",
+              });
+            } else if (this._dtpIconContainer) {
+              Utils.animate(this._dtpIconContainer, {
+                scale_x: 1,
+                scale_y: 1,
+                time: 0.13,
+                transition: "easeOutBack",
+              });
+            }
+          },
+        ],
         [
           this,
           "notify::mapped",
@@ -820,7 +845,7 @@ export const TaskbarAppIcon = GObject.registerClass(
 
     _setAppIconPadding() {
       this._iconContainer.set_style(
-        `padding-left: 7.15px; padding-right: 7.15px; padding-top: 0.35px;`
+        `padding-left: 7.2px; padding-right: 7.2px;`
       );
     }
 
@@ -925,19 +950,15 @@ export const TaskbarAppIcon = GObject.registerClass(
                 ? "START"
                 : "END"
             ];
-
           this._focusedDots.set_size(0, 0);
           this._focusedDots[isHorizontalDots ? "height" : "width"] =
             this._getRunningIndicatorSize();
-
           this._focusedDots.y_align = this._focusedDots.x_align =
             Clutter.ActorAlign.FILL;
           this._focusedDots[(isHorizontalDots ? "y" : "x") + "_align"] = align;
           this._focusedDots.background_color =
             this._getRunningIndicatorColor(isFocused);
           this._focusedDots.show();
-        } else if (this._focusedDots.visible) {
-          this._focusedDots.hide();
         }
       } else {
         let sizeProp = isHorizontalDots ? "width" : "height";
@@ -960,10 +981,10 @@ export const TaskbarAppIcon = GObject.registerClass(
         if (this._focusedIsWide) {
           newFocusedDotsSize =
             isFocused && this._nWindows > 0 ? this._containerSize : 0;
-          newFocusedDotsOpacity = 255;
+          newFocusedDotsOpacity = 255; // Her zaman görünür
         } else {
           newFocusedDotsSize = this._containerSize;
-          newFocusedDotsOpacity = isFocused && this._nWindows > 0 ? 255 : 0;
+          newFocusedDotsOpacity = 255; // Her zaman görünür
         }
 
         if (this._unfocusedIsWide) {
@@ -972,7 +993,7 @@ export const TaskbarAppIcon = GObject.registerClass(
           newUnfocusedDotsOpacity = 255;
         } else {
           newUnfocusedDotsSize = this._containerSize;
-          newUnfocusedDotsOpacity = !isFocused && this._nWindows > 0 ? 255 : 0;
+          newUnfocusedDotsOpacity = 255;
         }
 
         // Only animate if...
@@ -984,7 +1005,7 @@ export const TaskbarAppIcon = GObject.registerClass(
           (this._focusedIsWide != this._unfocusedIsWide ||
             this._focusedDots[sizeProp] != newUnfocusedDotsSize ||
             this._unfocusedDots[sizeProp] != newFocusedDotsSize);
-        let duration = animate ? Taskbar.DASH_ANIMATION_TIME : 0.001;
+        let duration = 0.17;
 
         this._animateDotDisplay(
           this._focusedDots,
@@ -1059,7 +1080,6 @@ export const TaskbarAppIcon = GObject.registerClass(
 
     activate(button, modifiers, handleAsGrouped) {
       let event = Clutter.get_current_event();
-
       modifiers = event ? event.get_state() : modifiers || 0;
 
       // Only consider SHIFT and CONTROL as modifiers (exclude SUPER, CAPS-LOCK, etc.)
@@ -1068,18 +1088,15 @@ export const TaskbarAppIcon = GObject.registerClass(
         (Clutter.ModifierType.SHIFT_MASK | Clutter.ModifierType.CONTROL_MASK);
 
       let ctrlPressed = modifiers & Clutter.ModifierType.CONTROL_MASK;
-
       if (ctrlPressed) {
         // CTRL-click or hotkey with ctrl
         return this._launchNewInstance(true);
       }
-
       // We check what type of click we have and if the modifier SHIFT is
       // being used. We then define what buttonAction should be for this
       // event.
       let buttonAction = 0;
       let doubleClick;
-
       if (button && button == 2) {
         if (modifiers & Clutter.ModifierType.SHIFT_MASK)
           buttonAction = SETTINGS.get_string("shift-middle-click-action");
@@ -1296,7 +1313,7 @@ export const TaskbarAppIcon = GObject.registerClass(
     }
 
     _getRunningIndicatorCount() {
-      return Math.min(this._nWindows, MAX_INDICATORS);
+      return this._nWindows > 0 ? 1 : 0;
     }
 
     _getRunningIndicatorSize() {
@@ -1966,6 +1983,7 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     this._onClicked = () => this._removeMenuTimeout();
 
     // constructor içinde
+    this.actor.set_pivot_point(0.5, 0.5); // Ortadan küçülme için
     this.actor.connect("notify::hover", () => {
       this.setShowAppsBoxShadow(this.actor.hover);
     });
@@ -1974,14 +1992,36 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     this.actor.connect("touch-event", this._onTouchEvent.bind(this));
     this.actor.connect("clicked", this._onClicked.bind(this));
     this.actor.connect("popup-menu", this._onKeyboardPopupMenu.bind(this));
+    this.actor.connect("notify::pressed", () => {
+      // Sadece ikon küçülsün
+      let iconBin = this.realShowAppsIcon.icon._iconBin;
+      if (!iconBin) return;
 
+      iconBin.set_pivot_point(0.5, 0.5);
+
+      if (this.actor.pressed) {
+        Utils.stopAnimations(iconBin);
+        iconBin.set_scale(1, 1);
+        Utils.animate(iconBin, {
+          scale_x: 0.9,
+          scale_y: 0.9,
+          time: 0.1,
+          transition: "easeOutQuad",
+        });
+      } else {
+        Utils.animate(iconBin, {
+          scale_x: 1,
+          scale_y: 1,
+          time: 0.13,
+          transition: "easeOutBack",
+        });
+      }
+    });
     this._menu = null;
     this._menuManager = new PopupMenu.PopupMenuManager(this.actor);
     this._menuTimeoutId = 0;
-
     this.realShowAppsIcon._dtpPanel = dtpPanel;
     Taskbar.extendDashItemContainer(this.realShowAppsIcon);
-
     let customIconPath = SETTINGS.get_string("show-apps-icon-file");
     this.realShowAppsIcon.icon.createIcon = function () {
       this._iconActor = new St.Icon({
@@ -2048,9 +2088,7 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     this.actor.sync_hover();
     this.emit("menu-state-changed", false);
   }
-  setShowAppsPadding() {
-    this.actor.set_style(`padding: 8px 14px;`);
-  }
+  setShowAppsPadding() {}
   createMenu() {
     if (!this._menu) {
       this._menu = new MyShowAppsIconMenu(

@@ -26,7 +26,7 @@ const DEFAULT_FONT_SIZES = [96, 64, 48, 32, 24, 16, 0];
 const DEFAULT_MARGIN_SIZES = [32, 24, 16, 12, 8, 4, 0];
 const DEFAULT_PADDING_SIZES = [32, 24, 16, 12, 8, 4, 0, -1];
 const LENGTH_MARKS = [100];
-const MAX_WINDOW_INDICATOR = 4;
+const MAX_WINDOW_INDICATOR = 1;
 
 const SCHEMA_PATH = "/org/gnome/shell/extensions/dash-to-panel/";
 
