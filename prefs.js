@@ -21,12 +21,11 @@ import {
 } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 const SCALE_UPDATE_TIMEOUT = 500;
-const DEFAULT_PANEL_SIZES = [128, 96, 64, 48, 32, 22];
+const DEFAULT_PANEL_SIZES = [52];
 const DEFAULT_FONT_SIZES = [96, 64, 48, 32, 24, 16, 0];
 const DEFAULT_MARGIN_SIZES = [32, 24, 16, 12, 8, 4, 0];
 const DEFAULT_PADDING_SIZES = [32, 24, 16, 12, 8, 4, 0, -1];
-// Minimum length could be 0, but a higher value may help prevent confusion about where the panel went.
-const LENGTH_MARKS = [100, 90, 80, 70, 60, 50, 40, 30, 20];
+const LENGTH_MARKS = [100];
 const MAX_WINDOW_INDICATOR = 4;
 
 const SCHEMA_PATH = "/org/gnome/shell/extensions/dash-to-panel/";
@@ -131,7 +130,6 @@ function checkHotkeyPrefix(settings) {
 const Preferences = class {
   constructor(window, settings, path) {
     // this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.dash-to-panel');
-    this._rtl = Gtk.Widget.get_default_direction() == Gtk.TextDirection.RTL;
     this._builder = new Gtk.Builder();
     this._builder.set_scope(new BuilderScope(this));
     this._settings = settings;
@@ -152,7 +150,6 @@ const Preferences = class {
     this._builder.add_from_file(this._path + "/ui/BoxDotOptions.ui");
     this._builder.add_from_file(this._path + "/ui/BoxShowDesktopOptions.ui");
     this._builder.add_from_file(this._path + "/ui/BoxDynamicOpacityOptions.ui");
-    this._builder.add_from_file(this._path + "/ui/BoxIntellihideOptions.ui");
     this._builder.add_from_file(
       this._path + "/ui/BoxShowApplicationsOptions.ui"
     );
@@ -3353,17 +3350,6 @@ const Preferences = class {
       scaleObj.set_format_value_func((scale, value) => {
         return `${value * (factor || 1)} ${scaleInfo.unit || "px"}`;
       });
-
-      // Corrent for rtl languages
-      if (this._rtl) {
-        // Flip value position: this is not done automatically
-        scaleObj.set_value_pos(Gtk.PositionType.LEFT);
-        // I suppose due to a bug, having a more than one mark and one above a value of 100
-        // makes the rendering of the marks wrong in rtl. This doesn't happen setting the scale as not flippable
-        // and then manually inverting it
-        scaleObj.set_flippable(false);
-        scaleObj.set_inverted(true);
-      }
     }
 
     maybeSetPanelLengthScaleValueChange(

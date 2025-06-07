@@ -141,9 +141,7 @@ export const TaskbarAppIcon = GObject.registerClass(
       this._dtpIconContainer = new St.Widget({
         style_class: "dtp-icon",
         layout_manager: new Clutter.BinLayout(),
-        style:
-          getIconContainerStyle(panel.geom.vertical) +
-          "margin-top: -2px !important;",
+        style: getIconContainerStyle() + "margin-top: -2px !important;",
       });
       this.remove_child(this._iconContainer);
       this.icon._iconBin.set_pivot_point(0.5, 0.5);
@@ -1784,18 +1782,6 @@ export function cssHexTocssRgba(cssHex, opacity) {
   return "rgba(" + [r, g, b].join(",") + "," + opacity + ")";
 }
 
-export function getIconPadding(dtpPanel) {
-  let panelSize = dtpPanel.geom.innerSize;
-  let padding = SETTINGS.get_int("appicon-padding");
-  let availSize = panelSize - Taskbar.MIN_ICON_SIZE - (panelSize % 2);
-
-  if (padding * 2 > availSize) {
-    padding = availSize * 0.5;
-  }
-
-  return padding;
-}
-
 /**
  * Extend AppMenu (AppIconMenu for pre gnome 41)
  *
@@ -1919,18 +1905,11 @@ export function ItemShowLabel() {
   let y = stageY + (itemHeight - labelHeight) * 0.5;
 
   switch (position) {
-    case St.Side.TOP:
-      y = stageY + labelOffset + itemHeight;
-      break;
     case St.Side.BOTTOM:
       y = stageY - labelHeight - labelOffset;
       break;
-    case St.Side.LEFT:
-      x = stageX + labelOffset + itemWidth;
-      break;
-    case St.Side.RIGHT:
-      x = stageX - labelWidth - labelOffset;
-      break;
+    default:
+      y = stageY - labelHeight - labelOffset;
   }
 
   // keep the label inside the screen border
@@ -1944,13 +1923,10 @@ export function ItemShowLabel() {
     x -= x + labelWidth - (monitor.x + monitor.width) + gap;
 
   this.label.set_position(Math.round(x), Math.round(y));
-
   let duration = Dash.DASH_ITEM_LABEL_SHOW_TIME;
-
   if (duration > 1) {
     duration /= 1000;
   }
-
   Utils.animate(this.label, {
     opacity: 255,
     time: duration,
@@ -2004,24 +1980,20 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     Taskbar.extendDashItemContainer(this.realShowAppsIcon);
 
     let customIconPath = SETTINGS.get_string("show-apps-icon-file");
-
-    this.realShowAppsIcon.icon.createIcon = function (size) {
+    this.realShowAppsIcon.icon.createIcon = function () {
       this._iconActor = new St.Icon({
         icon_name: "view-app-grid-symbolic",
-        icon_size: size,
+        icon_size: 31,
         style_class: "show-apps-icon",
         track_hover: true,
       });
-
       if (customIconPath) {
         this._iconActor.gicon = new Gio.FileIcon({
           file: Gio.File.new_for_path(customIconPath),
         });
       }
-
       return this._iconActor;
     };
-
     this._changedShowAppsIconId = SETTINGS.connect(
       "changed::show-apps-icon-file",
       () => {
@@ -2031,7 +2003,6 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
         );
       }
     );
-
     this._changedAppIconPaddingId = SETTINGS.connect(
       "changed::appicon-padding",
       () => this.setShowAppsPadding()
@@ -2040,10 +2011,8 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
       "changed::show-apps-icon-side-padding",
       () => this.setShowAppsPadding()
     );
-
     this.setShowAppsPadding();
   }
-
   _onButtonPress(_actor, event) {
     let button = event.get_button();
     if (button == 1) {
@@ -2054,38 +2023,23 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
     }
     return Clutter.EVENT_PROPAGATE;
   }
-
   _onLeaveEvent() {
     this.actor.fake_release();
     this._removeMenuTimeout();
   }
-
   _onTouchEvent(actor, event) {
     if (event.type() == Clutter.EventType.TOUCH_BEGIN) this._setPopupTimeout();
-
     return Clutter.EVENT_PROPAGATE;
   }
-
   _onMenuPoppedDown() {
     this._menu.sourceActor = this.actor;
     this.actor.sync_hover();
     this.emit("menu-state-changed", false);
   }
-
   setShowAppsPadding() {
-    let padding = getIconPadding(this.realShowAppsIcon._dtpPanel);
-    let sidePadding = SETTINGS.get_int("show-apps-icon-side-padding");
-    let isVertical = this.realShowAppsIcon._dtpPanel.geom.vertical;
-
-    this.actor.set_style(
-      "padding:" +
-        (padding + (isVertical ? sidePadding : 0)) +
-        "px " +
-        (padding + (isVertical ? 0 : sidePadding)) +
-        "px;"
-    );
+    let padding = 2.5;
+    this.actor.set_style("padding:" + padding + "px " + padding + "px;");
   }
-
   createMenu() {
     if (!this._menu) {
       this._menu = new MyShowAppsIconMenu(
@@ -2101,32 +2055,25 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
       this._menu.actor.connect("destroy", () => {
         Main.overview.disconnect(id);
       });
-
       // We want to keep the item hovered while the menu is up
       this._menu.blockSourceEvents = true;
-
       Main.uiGroup.add_child(this._menu.actor);
       this._menuManager.addMenu(this._menu);
     }
   }
-
   popupMenu(sourceActor = null) {
     this._removeMenuTimeout();
     this.actor.fake_release();
     this.createMenu();
-
     this._menu.updateItems(
       sourceActor == null ? this.realShowAppsIcon : sourceActor
     );
-
     this.actor.set_hover(true);
     this._menu.open(BoxPointer.PopupAnimation.FULL);
     this._menuManager.ignoreRelease();
     this.emit("sync-tooltip");
-
     return false;
   }
-
   shouldShowTooltip() {
     return (
       SETTINGS.get_boolean("show-tooltip") &&
@@ -2134,12 +2081,10 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
       (!this._menu || !this._menu.isOpen)
     );
   }
-
   destroy() {
     SETTINGS.disconnect(this._changedShowAppsIconId);
     SETTINGS.disconnect(this._changedAppIconSidePaddingId);
     SETTINGS.disconnect(this._changedAppIconPaddingId);
-
     this.realShowAppsIcon.destroy();
   }
 };
@@ -2150,51 +2095,31 @@ export const ShowAppsIconWrapper = class extends EventEmitter {
 export const MyShowAppsIconMenu = class extends PopupMenu.PopupMenu {
   constructor(actor, dtpPanel) {
     super(actor, 0, dtpPanel.geom.position);
-
     this._dtpPanel = dtpPanel;
-
     this.updateItems(actor);
   }
-
   updateItems(sourceActor) {
     this.sourceActor = sourceActor;
-
     this.removeAll();
-
     if (this.sourceActor != Main.layoutManager.dummyCursor) {
-      this._appendItem({
-        title: _("Power options"),
-        cmd: ["gnome-control-center", "power"],
-      });
-
       this._appendItem({
         title: _("Event logs"),
         cmd: ["gnome-logs"],
       });
-
       this._appendItem({
-        title: _("System"),
-        cmd: ["gnome-control-center", "system"],
-      });
-
-      this._appendItem({
-        title: _("Device Management"),
+        title: _("Device management"),
         cmd: ["gnome-control-center", "display"],
       });
-
       this._appendItem({
-        title: _("Disk Management"),
+        title: _("Disk management"),
         cmd: ["gnome-disks"],
       });
-
       this._appendList(
         SETTINGS.get_strv("show-apps-button-context-menu-commands"),
         SETTINGS.get_strv("show-apps-button-context-menu-titles")
       );
-
       this._appendSeparator();
     }
-
     JSON.parse(SETTINGS.get_string("context-menu-entries")).forEach((e) => {
       if (e.cmd == "TERMINALSETTINGS")
         e.cmd = TERMINALSETTINGS.get_string("exec");
@@ -2204,14 +2129,15 @@ export const MyShowAppsIconMenu = class extends PopupMenu.PopupMenu {
         cmd: e.cmd.split(" "),
       });
     });
-
     this._appendList(
       SETTINGS.get_strv("panel-context-menu-commands"),
       SETTINGS.get_strv("panel-context-menu-titles")
     );
-
+    this._appendItem({
+      title: _("Settings"),
+      cmd: ["gnome-control-center"],
+    });
     this._appendSeparator();
-
     let lockTaskbarMenuItem = this._appendMenuItem(
       SETTINGS.get_boolean("taskbar-locked")
         ? _("Unlock taskbar")
@@ -2223,48 +2149,21 @@ export const MyShowAppsIconMenu = class extends PopupMenu.PopupMenu {
         !SETTINGS.get_boolean("taskbar-locked")
       );
     });
-
-    this._appendItem({
-      title: _("Gnome Settings"),
-      cmd: ["gnome-control-center"],
-    });
-
-    let settingsMenuItem = this._appendMenuItem(_("Dash to Panel Settings"));
-    settingsMenuItem.connect("activate", () => DTP_EXTENSION.openPreferences());
-
-    if (this.sourceActor == Main.layoutManager.dummyCursor) {
-      this._appendSeparator();
-      let item = this._appendMenuItem(
-        this._dtpPanel._restoreWindowList
-          ? _("Restore Windows")
-          : _("Show Desktop")
-      );
-      item.connect(
-        "activate",
-        this._dtpPanel._onShowDesktopButtonPress.bind(this._dtpPanel)
-      );
-    }
   }
-
-  // Only add menu entries for commands that exist in path
   _appendItem(info) {
     if (GLib.find_program_in_path(info.cmd[0])) {
       let item = this._appendMenuItem(_(info.title));
-
       item.connect("activate", function () {
         Util.spawn(info.cmd);
       });
       return item;
     }
-
     return null;
   }
-
   _appendList(commandList, titleList) {
     if (commandList.length != titleList.length) {
       return;
     }
-
     for (let entry = 0; entry < commandList.length; entry++) {
       this._appendItem({
         title: titleList[entry],
@@ -2272,25 +2171,23 @@ export const MyShowAppsIconMenu = class extends PopupMenu.PopupMenu {
       });
     }
   }
-
   _appendSeparator() {
     let separator = new PopupMenu.PopupSeparatorMenuItem();
     this.addMenuItem(separator);
   }
-
   _appendMenuItem(labelText) {
-    // FIXME: app-well-menu-item style
     let item = new PopupMenu.PopupMenuItem(labelText);
+    item.add_style_class_name("app-well-menu-item");
     this.addMenuItem(item);
     return item;
   }
 };
-export const getIconContainerStyle = function (isVertical) {
+export const getIconContainerStyle = function () {
   let style = "padding: ";
   if (SETTINGS.get_boolean("group-apps")) {
-    style += isVertical ? "0;" : "0 " + DEFAULT_PADDING_SIZE + "px;";
+    style += "0 " + DEFAULT_PADDING_SIZE + "px;";
   } else {
-    style += (isVertical ? "" : "0 ") + DEFAULT_PADDING_SIZE + "px;";
+    style += "0 " + DEFAULT_PADDING_SIZE + "px;";
   }
   return style;
 };

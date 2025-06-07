@@ -142,7 +142,7 @@ export default class DashToPanelExtension extends Extension {
     let globalBorderRadius = SETTINGS.get_int("global-border-radius");
     if (globalBorderRadius)
       Main.layoutManager.uiGroup.add_style_class_name(
-        `br${globalBorderRadius * 4}`,
+        `br${globalBorderRadius * 4}`
       );
   }
   disableGlobalStyles() {

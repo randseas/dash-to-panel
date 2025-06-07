@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="gnome-shell-extensions">
-  <enum id='org.gnome.shell.extensions.dash-to-panel.appiconStyle'>
-    <value value='0' nick='NORMAL'/>
-    <value value='1' nick='SYMBOLIC'/>
-    <value value='2' nick='GRAYSCALE'/>
-  </enum>
   <enum id='org.gnome.shell.extensions.dash-to-panel.dotStyle'>
-    <value value='0' nick='DOTS'/>
-    <value value='1' nick='SQUARES'/>
     <value value='2' nick='DASHES'/>
-    <value value='3' nick='SEGMENTED'/>
-    <value value='4' nick='SOLID'/>
-    <value value='5' nick='CILIORA'/>
     <value value='6' nick='METRO'/>
   </enum>
   <enum id='org.gnome.shell.extensions.dash-to-panel.clickAction'>
@@ -43,9 +33,6 @@
   </enum>
   <enum id='org.gnome.shell.extensions.dash-to-panel.position'>
     <value value='0' nick='BOTTOM'/>
-    <value value='1' nick='TOP'/>
-    <value value='2' nick='LEFT'/>
-    <value value='3' nick='RIGHT'/>
   </enum>
   <enum id='org.gnome.shell.extensions.dash-to-panel.proximityBehavior'>
     <value value='0' nick='ALL_WINDOWS'/>
