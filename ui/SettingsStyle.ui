@@ -236,6 +236,12 @@
               <object class="GtkComboBoxText" id="dot_style_focused_combo">
                 <property name="valign">center</property>
                 <items>
+                  <item id="DOTS" translatable="yes">Dots</item>
+                  <item id="SQUARES" translatable="yes">Squares</item>
+                  <item id="DASHES" translatable="yes">Dashes</item>
+                  <item id="SEGMENTED" translatable="yes">Segmented</item>
+                  <item id="SOLID" translatable="yes">Solid</item>
+                  <item id="CILIORA" translatable="yes">Ciliora</item>
                   <item id="METRO" translatable="yes">Metro</item>
                 </items>
               </object>
@@ -249,7 +255,13 @@
               <object class="GtkComboBoxText" id="dot_style_unfocused_combo">
                 <property name="valign">center</property>
                 <items>
+                  <item id="DOTS" translatable="yes">Dots</item>
+                  <item id="SQUARES" translatable="yes">Squares</item>
                   <item id="DASHES" translatable="yes">Dashes</item>
+                  <item id="SEGMENTED" translatable="yes">Segmented</item>
+                  <item id="SOLID" translatable="yes">Solid</item>
+                  <item id="CILIORA" translatable="yes">Ciliora</item>
+                  <item id="METRO" translatable="yes">Metro</item>
                 </items>
               </object>
             </child>

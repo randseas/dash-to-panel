@@ -9,6 +9,7 @@
     <child>
       <object class="AdwPreferencesGroup" id="behavior_group_applications">
         <property name="title" translatable="yes">Applications</property>
+        
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show favorite applications</property>
@@ -19,6 +20,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show favorite applications on secondary panels</property>
@@ -29,6 +31,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show running applications</property>
@@ -39,6 +42,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Ungroup applications</property>
@@ -63,6 +67,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show notification counter badge</property>
@@ -75,12 +80,15 @@
             </child>
           </object>
         </child>
+
       </object>
     </child>
+
     <!-- group hover -->
     <child>
       <object class="AdwPreferencesGroup" id="behavior_group_hover">
         <property name="title" translatable="yes">Hover</property>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show window previews on hover</property>
@@ -105,6 +113,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Show tooltip on hover</property>
@@ -115,12 +124,15 @@
             </child>
           </object>
         </child>
+
       </object>
     </child>
+
     <!-- group isolate -->
     <child>
       <object class="AdwPreferencesGroup" id="behavior_group_isolate">
         <property name="title" translatable="yes">Isolate</property>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Isolate Workspaces</property>
@@ -131,6 +143,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Isolate monitors</property>
@@ -141,8 +154,10 @@
             </child>
           </object>
         </child>
+
       </object>
     </child>
+
     <!-- group overview -->
     <child>
       <object class="AdwPreferencesGroup" id="behavior_group_overview">
@@ -158,6 +173,7 @@
             </child>
           </object>
         </child>
+
         <child>
           <object class="AdwActionRow">
             <property name="title" translatable="yes">Disable show overview on startup</property>
@@ -168,7 +184,9 @@
             </child>
           </object>
         </child>
+
       </object>
     </child>
+
   </object>
 </interface>

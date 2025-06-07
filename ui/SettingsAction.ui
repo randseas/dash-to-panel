@@ -32,6 +32,13 @@
                 <property name="valign">center</property>
                 <items>
                   <item id="CYCLE-MIN" translatable="yes">Cycle windows + minimize</item>
+                  <item id="CYCLE" translatable="yes">Cycle through windows</item>
+                  <item id="TOGGLE-SHOWPREVIEW" translatable="yes">Toggle single / Preview multiple</item>
+                  <item id="TOGGLE-CYCLE" translatable="yes">Toggle single / Cycle multiple</item>
+                  <item id="TOGGLE-SPREAD" translatable="yes">Toggle single / Spread multiple</item>
+                  <item id="MINIMIZE" translatable="yes">Toggle windows</item>
+                  <item id="RAISE" translatable="yes">Raise windows</item>
+                  <item id="LAUNCH" translatable="yes">Launch new instance</item>
                 </items>
               </object>
             </child>
@@ -71,6 +78,8 @@
                 <items>
                   <item id="NOTHING" translatable="yes">Do nothing</item>
                   <item id="SWITCH_WORKSPACE" translatable="yes">Switch workspace</item>
+                  <item id="CYCLE_WINDOWS" translatable="yes">Cycle windows</item>
+                  <item id="CHANGE_VOLUME" translatable="yes">Change volume</item>
                 </items>
               </object>
             </child>
