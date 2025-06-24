@@ -26,11 +26,11 @@ const T4 = "ensureVisibleTimeout";
 
 const MAX_TRANSLATION = 40;
 const HEADER_HEIGHT = 38;
-const MAX_CLOSE_BUTTON_SIZE = 30;
-const MIN_DIMENSION = 100;
+const MAX_CLOSE_BUTTON_SIZE = 24;
+const MIN_DIMENSION = 32;
 const FOCUSED_COLOR_OFFSET = 24;
 const HEADER_COLOR_OFFSET = -12;
-const FADE_SIZE = 36;
+const FADE_SIZE = 366;
 const PEEK_INDEX_PROP = "_dtpPeekInitialIndex";
 
 let headerHeight = 0;
@@ -139,20 +139,15 @@ export const PreviewMenu = GObject.registerClass(
         ]
       );
     }
-
     disable() {
       this._timeoutsHandler.destroy();
       this._signalsHandler.destroy();
-
       this.close(true);
-
       Main.layoutManager.untrackChrome(this.menu);
       Main.layoutManager.removeChrome(this);
     }
-
     requestOpen(appIcon) {
       let timeout = SETTINGS.get_int("show-window-previews-timeout");
-
       if (this.opened) {
         timeout = Math.min(100, timeout);
       }

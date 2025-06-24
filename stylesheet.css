@@ -11,7 +11,7 @@
 
 #dashtopanelScrollview .overview-tile .overview-label {
   /* must match TITLE_RIGHT_PADDING in apppicons.js */
-  padding-right: 8px;
+  padding-right: 2px;
   text-align: left;
 }
 
@@ -37,7 +37,7 @@
   background-color: rgba(238, 238, 238, 0.1);
 }
 .dashtopanelMainPanel .dash-item-container .show-apps .overview-icon {
-  color: #fff;
+  color: #ffffff00;
 }
 .dashtopanelMainPanel .dash-item-container .show-apps:hover .overview-icon {
   background: none;
@@ -52,6 +52,11 @@
 #dashtopanelScrollview .overview-tile:hover .dtp-container.no-highlight,
 #dashtopanelScrollview .overview-tile:focus .dtp-container.no-highlight {
   background: none;
+}
+
+#dashtopanelMainPanel,
+#panel {
+  border-top: 1px transparent rgba(52, 52, 52, 0.5) outset;
 }
 
 #dashtopanelScrollview .overview-tile:active .dtp-container {
@@ -79,7 +84,7 @@
   spacing: 0;
 }
 #dashtopanelThumbnailList .preview-window-title {
-  padding-top: 1em;
+  padding-top: 0.75em;
 }
 .popup-menu.panel-menu {
   margin-bottom: 0;
@@ -89,7 +94,7 @@
   spacing: 0px;
 }
 .showdesktop-button-dark-hovered {
-  background-color: rgba(200, 200, 200, 0.4);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 .showdesktop-button-light-hovered {
   background-color: rgba(55, 55, 55, 0.4);
@@ -117,19 +122,19 @@
 #uiGroup #preview-menu .preview-header-box,
 #uiGroup #preview-menu .preview-container,
 #uiGroup #preview-menu .preview-close-btn-container {
-  border-radius: 7px !important;
+  border-radius: 8px !important;
 }
 #uiGroup .dtp-container {
   height: 50px !important;
   width: 50px !important;
 }
 .dashtopanelMainPanel .dtp-icon {
-  border-radius: 7px !important;
+  border-radius: 8px !important;
 }
 .overview-tile {
   margin-left: 3.5px !important;
   margin-top: 3.5px !important;
-  border-radius: 7px !important;
+  border-radius: 8px !important;
 }
 .show-apps {
   display: flex;
@@ -145,8 +150,10 @@
   font-size: 18.2px;
   margin-bottom: 4px;
 }
-
-.show-apps, .show-apps.toggle, .show-apps:focus, .show-apps:active {
+.show-apps,
+.show-apps.toggle,
+.show-apps:focus,
+.show-apps:active {
   padding-left: 3px !important;
   padding-right: 3px !important;
   padding-top: 0px !important;
