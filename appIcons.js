@@ -127,10 +127,9 @@ export const TaskbarAppIcon = GObject.registerClass(
       });
       this._dtpIconContainer = new St.Widget({
         layout_manager: new Clutter.BoxLayout(),
-        style: "padding: 0px 3.1px;",
+        style: "padding: 0px 3px; height: 48px;",
       });
       this.remove_child(this._iconContainer);
-      this.icon._iconBin.set_pivot_point(0.5, 0.5);
       this._dtpIconContainer.add_child(this._iconContainer);
       if (appInfo.window) {
         let box = Utils.createBoxLayout();
@@ -148,7 +147,12 @@ export const TaskbarAppIcon = GObject.registerClass(
         this._dotsContainer.add_child(this._dtpIconContainer);
       }
       this._container.add_child(this._dotsContainer);
-      this.set_child(this._container);
+      this._outerWrapper = new St.Widget({
+        layout_manager: new Clutter.BinLayout(),
+        style: "padding-top: 3px; padding-bottom: 2px;",
+      });
+      this._outerWrapper.add_child(this._container);
+      this.set_child(this._outerWrapper);
       if (panel.geom.vertical) {
         this.set_width(panel.geom.innerSize);
       }
@@ -160,7 +164,9 @@ export const TaskbarAppIcon = GObject.registerClass(
       }
       this._onAnimateAppiconHoverChanged();
       this._onAppIconHoverHighlightChanged();
-      this._setAppIconPadding();
+      /* set app icon padding */
+      this.set_style(`padding: 0px 1px;`);
+      this._iconContainer.set_style("padding: " + 8 + "px;");
       this._setAppIconStyle();
       this._showDots();
       this._numberOverlay();
@@ -817,16 +823,6 @@ export const TaskbarAppIcon = GObject.registerClass(
           global.display.focus_window.get_monitor() ===
             this.dtpPanel.monitor.index)
       );
-    }
-
-    _setAppIconPadding() {
-      const padding = getIconPadding(this.dtpPanel);
-      const margin = SETTINGS.get_int("appicon-margin");
-      let vertical = this.dtpPanel.geom.vertical;
-      this.set_style(
-        `padding: ${vertical ? margin : 0}px ${vertical ? 0 : margin}px;`
-      );
-      this._iconContainer.set_style("padding: " + padding + "px;");
     }
 
     _setAppIconStyle() {}

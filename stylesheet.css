@@ -229,11 +229,3 @@
 #uiGroup.br20 .dashtopanelPanel.dock .showdesktop-button {
   border-radius: 0 20px 20px 0 !important;
 }
-
-.dtp-icon-wrapper {
-  padding: 0;       /* ikon içini etkilemez */
-  spacing: 0;       /* kutu içindeki çocukların arası */
-}
-.dtp-icon-container {
-  padding: 4px;     /* ikonun etrafındaki boşluk */
-}
