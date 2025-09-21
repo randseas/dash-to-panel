@@ -1,0 +1,10 @@
+{
+  "description": "Taskbar",
+  "extension-id": "dash-to-panel",
+  "gettext-domain": "dash-to-panel",
+  "name": "Dash to Panel",
+  "shell-version": ["46", "47", "48", "49"],
+  "url": "https://github.com/randseas/dash-to-panel",
+  "uuid": "dash-to-panel@randseas.github.com",
+  "version": 70
+}
